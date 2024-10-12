@@ -169,6 +169,8 @@ app.post('/api/auth/login', async (req:Request, res:any) => {
 })
 
 
+// "nodemon --exec ts-node src/script.ts"
+
 app.listen(PORT, () => {
     console.log(`server is listening on port: ${PORT}`);
 })
