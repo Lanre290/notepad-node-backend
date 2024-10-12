@@ -24,7 +24,11 @@ const corsOption:corsInterface = {
 }
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    user: process.env.DB_USER,       
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: SQL_PORT,
 });
 
 const checkTableExists = async (tableName: string) => {
