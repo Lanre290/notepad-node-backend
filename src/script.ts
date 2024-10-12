@@ -69,7 +69,7 @@ const tableExists = await checkTableExists(tableName);
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 "user" INT NOT NULL,
-                content LONGTEXT,
+                content TEXT,
                 timestamp INT,
                 );
             `;
