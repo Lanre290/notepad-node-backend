@@ -1,11 +1,11 @@
 {
   "name": "notepad",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/script.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec ts-node src/script.ts",
-    "build": "tsc -p ."
+    "build": "tsc",
+    "start": "node dist/script.js"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +22,15 @@
     "pg": "^8.13.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
-  }
+  },
+  "compilerOptions": {
+    "outDir": "./dist", // Specify the output directory
+    // other options...
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
