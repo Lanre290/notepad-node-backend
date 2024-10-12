@@ -4,6 +4,7 @@ const cors = require('cors');
 import dotenv from 'dotenv';
 import { Request } from 'express';
 import { Pool } from 'pg';
+const bcrypt = require('bcrypt');
 
 dotenv.config(); 
 
@@ -11,6 +12,7 @@ dotenv.config();
 const PORT:any = process.env.PORT || 5000;
 const SQL_PORT:any = process.env.DB_PORT;
 const FRONTEND_URL:any = process.env.FRONTEND_URL;
+
 
 interface corsInterface {
     origin:string;
@@ -85,6 +87,16 @@ const tableExists = await checkTableExists(tableName);
     }
 };
 
+const encryptPassword = async (password:string) => {
+    let saltRounds:number | any = process.env.SALT_ROUNDS;
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        return hashedPassword;
+    } catch (error) {
+        console.error('Error encrypting password.');
+    }
+}
+
 ensureTableExists('users');
 ensureTableExists('notes');
 
@@ -101,10 +113,24 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
     res.status(401).json({'error': 'Unexpected request.'});
   }
   else{
-    const emailExists = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
+    const emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
 
-    console.log(emailExists);
-    res.status(200).json({data: emailExists});
+    let emailExistsNo = emailExistsQuery.data.rows.count;
+    if(emailExistsNo > 0){
+        res.status(409).json({'error': 'Email already exists.'});
+    }
+    else{
+        const query = `INSERT INTO users (name, email, pwd) VALUES ($1, $2, $3)`;
+
+        let encrytedPassword = await encryptPassword(pwd);
+
+        let queryResult = await pool.query(query, [name, email, encrytedPassword]);
+
+        console.log(queryResult);
+    }
+
+    // console.log(emailExists);
+    // res.status(200).json({data: emailExists});
   }
 })
 
