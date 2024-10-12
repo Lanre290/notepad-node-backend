@@ -4,7 +4,7 @@ const cors = require('cors');
 import dotenv from 'dotenv';
 import { Request } from 'express';
 import { Pool } from 'pg';
-const bcrypt = require('bcrypt');
+import * as bcrypt from 'bcrypt'
 
 dotenv.config(); 
 
