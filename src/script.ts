@@ -70,7 +70,7 @@ const tableExists = await checkTableExists(tableName);
                 name VARCHAR(100) NOT NULL,
                 "user" INT NOT NULL,
                 content TEXT,
-                timestamp INT,
+                timestamp INT
                 );
             `;
         }
