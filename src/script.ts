@@ -68,9 +68,9 @@ const tableExists = await checkTableExists(tableName);
                 CREATE TABLE notes (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
-                "user" INT(30) NOT NULL,
+                "user" INT NOT NULL,
                 content LONGTEXT,
-                timestamp INT(40),
+                timestamp INT,
                 );
             `;
         }
