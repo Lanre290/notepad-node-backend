@@ -59,7 +59,7 @@ const tableExists = await checkTableExists(tableName);
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 email VARCHAR(40) NOT NULL,
-                pwd LONGTEXT
+                pwd TEXT
                 );
             `;
         }
