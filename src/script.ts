@@ -4,7 +4,8 @@ const cors = require('cors');
 import dotenv from 'dotenv';
 import { Request } from 'express';
 import { Pool } from 'pg';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+
 
 dotenv.config(); 
 
@@ -90,8 +91,14 @@ const tableExists = await checkTableExists(tableName);
 const encryptPassword = async (password:string) => {
     let saltRounds:number | any = process.env.SALT_ROUNDS;
     try {
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        return hashedPassword;
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if(err){
+                return 'Error';
+            }
+            else{
+                return hash
+            }
+        });
     } catch (error) {
         console.error('Error encrypting password.');
     }
