@@ -91,7 +91,7 @@ const tableExists = await checkTableExists(tableName);
 const encryptPassword = async (password:string) => {
     let saltRounds:number | any = process.env.SALT_ROUNDS;
     try {
-        bcrypt.hash(password, saltRounds, (err, hash) => {
+        bcrypt.hash(password, saltRounds, (err:any, hash:any) => {
             if(err){
                 return 'Error';
             }
