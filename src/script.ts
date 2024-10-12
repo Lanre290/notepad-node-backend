@@ -4,7 +4,7 @@ const cors = require('cors');
 import dotenv from 'dotenv';
 import { Request } from 'express';
 import { Pool } from 'pg';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 
 dotenv.config(); 
 
@@ -97,6 +97,20 @@ const encryptPassword = async (password:string) => {
     }
 }
 
+const verifyPassword = async (plainTextPassword:string, hashedPassword:string) => {
+    try {
+        const match = await bcrypt.compare(plainTextPassword, hashedPassword);
+        if (match) {
+            console.log('Passwords match!');
+        } else {
+            console.log('Passwords do not match!');
+        }
+        return match;
+    } catch (error) {
+        return "Error verifying passwordds.";
+    }
+};
+
 ensureTableExists('users');
 ensureTableExists('notes');
 
@@ -131,6 +145,26 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
 
     // console.log(emailExists);
     // res.status(200).json({data: emailExists});
+  }
+})
+
+app.post('/api/auth/login', async (req:Request, res:any) => {
+  const {email, pwd} = req.body;
+
+  if(!email || !pwd){
+    res.status(401).json({'error': 'Unexpected response.'});
+  }
+  else{
+    let emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
+
+    let emailExistsNo = emailExistsQuery.data.rows.count;
+    if(emailExistsNo < 1){
+        res.status(404, {'error': "Email does not exist."});
+    }
+    else{
+        let userData = await pool.query('SELECT * from users WHERE email=$1', [email]);
+        
+    }
   }
 })
 
