@@ -148,6 +148,7 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
         let queryResult = await pool.query(query, [name, email, encrytedPassword]);
 
         console.log(queryResult);
+        res.status(200).json({data: queryResult});
     }
 
     // console.log(emailExists);
