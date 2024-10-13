@@ -136,20 +136,22 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
   else{
     const emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
 
-    let emailExistsNo = await emailExistsQuery.data.rows.count;
-    if(emailExistsNo > 0){
-        res.status(409).json({'error': 'Email already exists.'});
-    }
-    else{
-        const query = `INSERT INTO users (name, email, pwd) VALUES ($1, $2, $3)`;
+    let emailExistsNo = await emailExistsQuery.data;
+    console.log(emailExistsNo);
 
-        let encrytedPassword = await encryptPassword(pwd);
+    // if(emailExistsNo > 0){
+    //     res.status(409).json({'error': 'Email already exists.'});
+    // }
+    // else{
+    //     const query = `INSERT INTO users (name, email, pwd) VALUES ($1, $2, $3)`;
 
-        let queryResult = await pool.query(query, [name, email, encrytedPassword]);
+    //     let encrytedPassword = await encryptPassword(pwd);
 
-        console.log(queryResult);
-        res.status(200).json({data: queryResult});
-    }
+    //     let queryResult = await pool.query(query, [name, email, encrytedPassword]);
+
+    //     console.log(queryResult);
+    //     res.status(200).json({data: queryResult});
+    // }
   }
 })
 
