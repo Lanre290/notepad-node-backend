@@ -169,7 +169,7 @@ app.post('/api/auth/login', async (req:Request, res:any) => {
 
         let emailExistsNo = emailExistsQuery.data.rows.count;
         if(emailExistsNo < 1){
-            res.status(404, {'error': "Email does not exist."});
+            res.status(404).json({'error': "Email does not exist."});
         }
         else{
             let userData = await pool.query('SELECT * from users WHERE email=$1', [email]);
