@@ -136,7 +136,7 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
   else{
     const emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
 
-    let emailExistsNo = await emailExistsQuery;
+    let emailExistsNo = emailExistsQuery.rows[0];
     res.status(200).json({data: emailExistsNo});
 
     // if(emailExistsNo > 0){
