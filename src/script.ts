@@ -134,10 +134,14 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
     res.status(401).json({'error': 'Unexpected request.'});
   }
   else{
-    const emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
+    try {
+        const emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
 
-    let emailExistsNo = emailExistsQuery.rows[0];
-    res.status(200).json({data: emailExistsNo});
+        let emailExistsNo = emailExistsQuery.rows[0];
+        res.status(200).json({data: emailExistsNo});
+    } catch (error) {
+        res.status(500).json({error: 'Internal server error', errorData: error})
+    }
 
     // if(emailExistsNo > 0){
     //     res.status(409).json({'error': 'Email already exists.'});
