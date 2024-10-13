@@ -311,9 +311,9 @@ app.post("/api/auth/login", async (req: Request, res: Response) => {
 });
 
 app.post('/otp', function (req:Request | any, res:any) {
-  const userId = req.user.id;
-  const userEmail = req.user.email;
-  const username = req.user.name;
+  const userId = req.session.user.id;
+  const userEmail = req.session.user.email;
+  const username = req.session.user.name;
 
   if(!userId || !userEmail || !username){
     res.status(401).json({'error': 'Unauthorized acess.'});
@@ -327,7 +327,7 @@ app.post('/verify-otp', function (req:Request | any, res:any) {
   let {otp} = req.body;
 
   if(otp != req.session.otp){
-    res.status(409).json({'error': 'Incorrect otp entered.'});
+    res.status(409).json({'error': 'Incorrect otp entered.', 'otp': req.session.otp});
   }
   else{
     res.status(200).json({success: true});
