@@ -136,7 +136,7 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
   else{
     const emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
 
-    let emailExistsNo = emailExistsQuery.data.rows.count;
+    let emailExistsNo = await emailExistsQuery.data.rows.count;
     if(emailExistsNo > 0){
         res.status(409).json({'error': 'Email already exists.'});
     }
@@ -150,9 +150,6 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
         console.log(queryResult);
         res.status(200).json({data: queryResult});
     }
-
-    // console.log(emailExists);
-    // res.status(200).json({data: emailExists});
   }
 })
 
@@ -171,6 +168,8 @@ app.post('/api/auth/login', async (req:Request, res:any) => {
     }
     else{
         let userData = await pool.query('SELECT * from users WHERE email=$1', [email]);
+
+        
         
     }
   }
