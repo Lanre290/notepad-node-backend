@@ -148,7 +148,7 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
             let encrytedPassword = await encryptPassword(pwd);
 
             let queryResult = await pool.query(query, [name, email, encrytedPassword]);
-            
+
             res.status(200).json({data: queryResult});
         }
     } catch (error) {
@@ -158,24 +158,28 @@ app.post('/api/auth/signup', async (req:Request, res:any) => {
 })
 
 app.post('/api/auth/login', async (req:Request, res:any) => {
-  const {email, pwd} = req.body;
+  try {
+    const {email, pwd} = req.body;
 
-  if(!email || !pwd){
-    res.status(401).json({'error': 'Unexpected response.'});
-  }
-  else{
-    let emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
-
-    let emailExistsNo = emailExistsQuery.data.rows.count;
-    if(emailExistsNo < 1){
-        res.status(404, {'error': "Email does not exist."});
+    if(!email || !pwd){
+        res.status(401).json({'error': 'Unexpected response.'});
     }
     else{
-        let userData = await pool.query('SELECT * from users WHERE email=$1', [email]);
+        let emailExistsQuery:any = await pool.query('SELECT COUNT(*) FROM users WHERE email=$1',[email]);
 
-        
-        
+        let emailExistsNo = emailExistsQuery.data.rows.count;
+        if(emailExistsNo < 1){
+            res.status(404, {'error': "Email does not exist."});
+        }
+        else{
+            let userData = await pool.query('SELECT * from users WHERE email=$1', [email]);
+
+            res.status(200).json(data: userData)
+            
+        }
     }
+  } catch (error) {
+    
   }
 })
 
