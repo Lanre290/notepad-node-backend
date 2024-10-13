@@ -174,7 +174,7 @@ app.post('/api/auth/login', async (req:Request, res:any) => {
         else{
             let userData = await pool.query('SELECT * from users WHERE email=$1', [email]);
 
-            res.status(200).json(data: userData)
+            res.status(200).json({data: userData})
             
         }
     }
