@@ -8,6 +8,11 @@ import bcrypt from "bcryptjs";
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
+
+
+const redisClient = redis.createClient();
 
 dotenv.config();
 
@@ -41,6 +46,7 @@ app.use(cors(corsOption));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
+  store: new RedisStore({ client: redisClient }),
   secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: true,
