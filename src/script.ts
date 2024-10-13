@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis').default(session);
 const redis = require('redis');
 
 
