@@ -147,6 +147,8 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/api/auth/signup", async (req: Request, res: any) => {
   const { name, email, pwd } = req.body;
 
+  console.log(req.body);
+
   if (!name || !email || !pwd) {
     res.status(401).json({ error: "Unexpected request." });
   } else {
