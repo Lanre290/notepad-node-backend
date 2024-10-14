@@ -277,6 +277,7 @@ app.post("/api/auth/login", async (req: Request, res: Response) => {
     }
 
     const user = userData.rows[0];
+    console.log(user);
 
     const match = await bcrypt.compare(pwd, user.pwd);
     if (match) {
