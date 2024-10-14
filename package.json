@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/script.js",
-    "build": "tsc; npm i bcryptjs@latest"
+    "build": "npm i bcryptjs@latest; tsc"
   },
   "keywords": [],
   "author": "",
