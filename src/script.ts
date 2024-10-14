@@ -106,20 +106,18 @@ const ensureTableExists = async (tableName: string) => {
   }
 };
 
-const encryptPassword = async (password: string) => {
-  let saltRounds: number | any = process.env.SALT_ROUNDS;
+const encryptPassword = async (password: string): Promise<string | null> => {
+  const saltRounds: number = parseInt(process.env.SALT_ROUNDS || "10", 10);
+
   try {
-    bcrypt.hash(password, saltRounds, (err: any, hash: any) => {
-      if (err) {
-        return "Error";
-      } else {
-        return hash;
-      }
-    });
+    const hash = await bcrypt.hash(password, saltRounds);
+    return hash;
   } catch (error) {
-    console.error("Error encrypting password.");
+    console.error("Error encrypting password:", error);
+    return null;
   }
 };
+
 
 const verifyPassword = async (
   plainTextPassword: string,
