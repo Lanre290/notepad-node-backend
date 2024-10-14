@@ -267,48 +267,30 @@ app.post("/api/auth/login", async (req: Request, res: Response) => {
     const { email, pwd } = req.body;
 
     if (!email || !pwd) {
-      res.status(401).json({ error: "Unexpected request." });
-    } else {
-      let emailExistsQuery: any = await pool.query(
-        "SELECT COUNT(*) FROM users WHERE email=$1",
-        [email]
-      );
-
-      let emailExistsNo = emailExistsQuery.data.rows.count;
-      if (emailExistsNo < 1) {
-        res.status(404).json({ error: "Email does not exist." });
-      } else {
-        let userData = await pool.query("SELECT * FROM users WHERE email=$1", [
-          email,
-        ]);
-
-        interface userInterface {
-          name: string;
-          email: string;
-          pwd: string;
-        }
-        let user: userInterface = userData.rows[0];
-
-        try {
-          const match = await bcrypt.compare(pwd, user.pwd);
-          if (match) {
-            res.status(200).json({success: true});
-          } else {
-            res
-              .status(409)
-              .json({ success: false, error: "Incorrect details provided." });
-          }
-        } catch (error) {
-          res
-            .status(400)
-            .json({ sucess: false, error: "Failed to load resource." });
-        }
-
-        res.status(200).json({ data: userData });
-      }
+      return res.status(401).json({ error: "Unexpected request." });
     }
-  } catch (error) {}
+
+    let userData = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
+
+    if (userData.rows.length === 0) {
+      return res.status(404).json({ error: "Email does not exist." });
+    }
+
+    const user = userData.rows[0];
+
+    const match = await bcrypt.compare(pwd, user.pwd);
+    if (match) {
+      return res.status(200).json({ success: true });
+    } else {
+      return res.status(409).json({ success: false, error: "Incorrect details provided." });
+    }
+
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error." });
+    console.error(error);
+  }
 });
+
 
 app.post('/otp', function (req:Request | any, res:any) {
   const userId = req.session.user.id;
